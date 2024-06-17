@@ -1,0 +1,39 @@
+# prod
+dist/
+
+# dev
+.yarn/
+!.yarn/releases
+.vscode/*
+!.vscode/launch.json
+!.vscode/*.code-snippets
+.idea/workspace.xml
+.idea/usage.statistics.xml
+.idea/shelf
+
+# deps
+node_modules/
+.wrangler
+
+# env
+.env
+.env.production
+.dev.vars
+
+# logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# misc
+.DS_Store
+
+#//final-db url
+#: postgres://avnadmin:AVNS_mlkKYg-1WA4BrFWQHvl@pg-11434c81-kedar10396-d25d.j.aivencloud.com:13667/defaultdb?sslmode=require
+
+#// connection pool url :
+#DATABASE_URL="prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiZDY4ZDM1NjctM2NkYS00NzNhLTlkZDMtYmMzMzNiODI5NDk5IiwidGVuYW50X2lkIjoiMjBmMDQyNTU2MGM4YmE0ZGVjYzJhMmRmM2ZjY2FiMDI2MWNlZjFmODBlZmQ2ODcyNzdlOGQ3ZDYxYWE0YTE0ZiIsImludGVybmFsX3NlY3JldCI6ImIxOTg3OTk2LTRkNDUtNGQzMi05NWE1LWM0NjRlZTU3ZmVmYyJ9.JBGo3RDZ00FuhC6sxKISKAJXk9fzGkCUWzlPyy7buAE"

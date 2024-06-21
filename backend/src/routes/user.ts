@@ -3,7 +3,7 @@ import { withAccelerate } from '@prisma/extension-accelerate'
 
 import { Hono } from 'hono'
 import { sign , verify } from 'hono/jwt'
-import {signupZodCheck} from '@kedar0011/medium-common'
+import {signupInput , signinInput } from '@100xdevs/medium-common'
 
 
 export const userRoute = new Hono<{
@@ -23,8 +23,12 @@ userRoute.post('/signup', async (c) => {
     
     const body = await c.req.json();
 
-    const { success } = signupZodCheck.safeParse(body)
+    const { success } = signupInput.safeParse(body)
     
+    if(! success ){
+      c.status(404)
+      return c.json({mssg : "Invalid input"})
+    }
     const user = await prisma.user.create({
       data : {
         email : body.email,
@@ -48,6 +52,14 @@ userRoute.post('/signup', async (c) => {
       }).$extends(withAccelerate())
     
       const body = await c.req.json();
+
+      const { success } = signinInput.safeParse(body)
+
+      if(! success ){
+        c.status(404)
+        return c.json({mssg : "Invalid input"})
+      }
+
       const user = await prsima.user.findUnique({
         where : {
           email : body.email,

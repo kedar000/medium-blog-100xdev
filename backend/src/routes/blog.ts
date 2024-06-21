@@ -4,6 +4,7 @@ import { withAccelerate } from '@prisma/extension-accelerate'
 import { Hono } from 'hono'
 import { sign , verify } from 'hono/jwt'
 import { string } from 'zod'
+import {createBlogInput , updateBlogInput} from '@100xdevs/medium-common'
 
 
 export const blogRoute = new Hono<{
@@ -39,6 +40,14 @@ blogRoute.post('/', async (c) => {
     }).$extends(withAccelerate())
     
     const body = await c.req.json();
+
+    const { success } = createBlogInput.safeParse(body)
+
+    if(! success ){
+        c.status(404)
+        return c.json({mssg : "Invalid input"})
+      }
+
     const userId = c.get("userId")
     try {
         const blog = await prsima.blog.create({
@@ -69,6 +78,13 @@ blogRoute.post('/', async (c) => {
     }).$extends(withAccelerate())
     
     const body = await c.req.json();
+
+    const { success } = updateBlogInput.safeParse(body)
+
+    if(! success ){
+        c.status(404)
+        return c.json({mssg : "Invalid input"})
+      }
     
     try {
         const blog = await prsima.blog.update({

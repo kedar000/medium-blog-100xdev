@@ -1,49 +1,39 @@
 import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
+
 import { Hono } from 'hono'
+import { sign , verify } from 'hono/jwt'
+import { userRoute } from './routes/user'
+import { blogRoute } from './routes/blog'
 
 const app = new Hono<{
   Bindings : {
-    DATABASE_URL : string
+    DATABASE_URL : string,
+    JWT_SECRET : string
   }
 }>()
 
 
-app.post('/api/v1/blog/signup', async (c) => {
 
-const prisma = new PrismaClient({
-    datasourceUrl: c.env.DATABASE_URL,
-}).$extends(withAccelerate())
+app.route('/api/v1/user' , userRoute);
+app.route('/api/v1/blog' , blogRoute);
 
-const body = await c.req.json();
 
-await prisma.user.create({
-  data : {
-    email : body.email,
-    password : body.password
-  },
+app.use('/api/v1/blog/*' ,async (c , next) =>{
+  const header = c.req.header('Authorization') || "";
+
+  const token = header.split(" ")[1]
+  const response = await verify(token , c.env.JWT_SECRET);
+  if(response.id){
+    next()
+  }else{
+    c.status(404)
+    return c.json({error : "unauthorized "})
+  }
+
 })
 
 
-  return c.text('post signup route')
-})
 
-app.get('/api/v1/blog/:id', (c) => {
-  const id = c.req.param('id')
-  console.log(id);
-  
-  return c.text('get route ')
-})
 
-app.post('/api/v1/blog/signin', (c) => {
-  return c.text('post signinn route!')
-})
-
-app.post('/api/v1/blog/blog', (c) => {
-  return c.text('post blog route!')
-})
-
-app.put('/api/v1/blog/blog', (c) => {
-  return c.text('put route!')
-})
 export default app

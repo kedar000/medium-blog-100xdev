@@ -45,6 +45,7 @@ export declare const updateBlogZodCheck: z.ZodObject<{
     content: string;
     id: string;
 }>;
+export declare function add(number1: number, number2: number): number;
 export type SignUptype = z.infer<typeof signupZodCheck>;
 export type SignIntype = z.infer<typeof signinZodcheck>;
 export type CreateBlogtype = z.infer<typeof createBlogZodCheck>;

@@ -22,12 +22,12 @@ app.route('/api/v1/blog' , blogRoute);
 app.use('/api/v1/blog/*' ,async (c , next) =>{
   const header = c.req.header('Authorization') || "";
 
-  const token = header.split(" ")[1]
-  const response = await verify(token , c.env.JWT_SECRET);
+  // const token = header.split(" ")[1]
+  const response = await verify(header , c.env.JWT_SECRET);
   if(response.id){
     next()
   }else{
-    c.status(404)
+    // c.status(404)
     return c.json({error : "unauthorized "})
   }
 

@@ -3,7 +3,7 @@ import { withAccelerate } from '@prisma/extension-accelerate'
 
 import { Hono } from 'hono'
 import { sign , verify } from 'hono/jwt'
-import {signupInput , signinInput } from '@100xdevs/medium-common'
+import { signupZodCheck , signinZodcheck  } from "../zod"
 
 
 export const userRoute = new Hono<{
@@ -23,7 +23,7 @@ userRoute.post('/signup', async (c) => {
     
     const body = await c.req.json();
 
-    const { success } = signupInput.safeParse(body)
+    const { success } = signupZodCheck.safeParse(body)
     
     if(! success ){
       c.status(404)
@@ -53,7 +53,7 @@ userRoute.post('/signup', async (c) => {
     
       const body = await c.req.json();
 
-      const { success } = signinInput.safeParse(body)
+      const { success } = signinZodcheck.safeParse(body)
 
       if(! success ){
         c.status(404)
@@ -76,4 +76,4 @@ userRoute.post('/signup', async (c) => {
       return c.json({token : jwt})
     })
     
-    //---
+    //---------------------------------------------

@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@100xdevs/medium-common": "^1.0.0",
+    "@kedar0011/medium": "^1.0.0",
     "@kedar0011/medium-common": "^1.0.0",
     "@prisma/client": "^5.15.0",
     "@prisma/extension-accelerate": "^1.1.0",

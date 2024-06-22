@@ -1,3 +1,4 @@
+
 import z from "zod";
 export const signupZodCheck = z.object({
     email : z.string().email(),

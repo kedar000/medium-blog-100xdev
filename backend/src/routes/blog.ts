@@ -4,7 +4,7 @@ import { withAccelerate } from '@prisma/extension-accelerate'
 import { Hono } from 'hono'
 import { sign , verify } from 'hono/jwt'
 import { string } from 'zod'
-import {createBlogInput , updateBlogInput} from '@100xdevs/medium-common'
+import {createBlogZodCheck , updateBlogZodCheck} from '../zod'
 
 
 export const blogRoute = new Hono<{
@@ -19,7 +19,9 @@ export const blogRoute = new Hono<{
     
 
 blogRoute.use('/*' , async (c , next) =>{
-    const authHeader = c.req.header('Authorization') || ""
+    console.log("called middleware");
+    
+    const authHeader = c.req.header('authorization') || ""
     const user = await verify(authHeader , c.env.JWT_SECRET)
     
     if (user && typeof user.id === 'string') {
@@ -41,8 +43,9 @@ blogRoute.post('/', async (c) => {
     
     const body = await c.req.json();
 
-    const { success } = createBlogInput.safeParse(body)
-
+    const { success } = createBlogZodCheck.safeParse(body)
+    console.log("aftersuccess");
+    
     if(! success ){
         c.status(404)
         return c.json({mssg : "Invalid input"})
@@ -62,7 +65,7 @@ blogRoute.post('/', async (c) => {
     } catch (error) {
         c.status(404);
         return c.json({
-            mssg : "you are not logged in"
+            mssg : "you are not logged in" , err : error
         })
 
     }
@@ -79,7 +82,7 @@ blogRoute.post('/', async (c) => {
     
     const body = await c.req.json();
 
-    const { success } = updateBlogInput.safeParse(body)
+    const { success } = updateBlogZodCheck.safeParse(body)
 
     if(! success ){
         c.status(404)
